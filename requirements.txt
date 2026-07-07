@@ -1,0 +1,27 @@
+# Core agent orchestration
+langgraph>=0.2.0
+langchain-core>=0.3.0
+
+# Local LLM backends
+langchain-ollama>=0.2.0        # Ollama backend
+langchain-openai>=0.2.0        # LM Studio (OpenAI-compatible endpoint)
+
+# Observability
+langsmith>=0.1.0
+
+# Data / DB
+pandas>=2.0.0
+sqlparse>=0.5.0
+
+# Visualization
+plotly>=5.20.0
+# 圖表預設輸出為互動式 HTML(可靠、跨平台、無外部行程)。
+# 若需 PNG 靜態匯出(選用),安裝 kaleido==0.2.1(注意: kaleido 1.x 與 plotly 5.x 不相容,
+# 且在部分 Windows 環境會卡住,故非必要):
+# kaleido==0.2.1
+
+# Web UI
+gradio>=4.44.0
+
+# Config
+python-dotenv>=1.0.0

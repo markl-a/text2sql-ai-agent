@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# 環境設定(勿提交金鑰)
+.env
+
+# 資料庫與生成產物(可由 CSV/程式重建)
+data/*.db
+data/charts/
+
+# 測試/快取
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS / 編輯器
+.DS_Store
+.idea/
+.vscode/

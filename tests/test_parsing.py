@@ -39,3 +39,16 @@ def test_extract_sql_with_reasoning():
 
 def test_extract_sql_strips_trailing_semicolon_and_second_stmt():
     assert extract_sql("SELECT 1; DROP TABLE x") == "SELECT 1"
+
+
+def test_extract_sql_sanitizes_sentencepiece_underline():
+    # gemma3n 偶爾把 sentencepiece 空白記號 ▁(U+2581) 原樣輸出當縮排
+    text = "```sql\nSELECT\n▁▁product_line,\n▁▁SUM(sales)\nFROM sales\nGROUP BY product_line\n```"
+    sql = extract_sql(text)
+    assert "▁" not in sql
+    assert "product_line" in sql and "SUM(sales)" in sql
+
+
+def test_extract_sql_sanitizes_nbsp_and_zero_width():
+    text = "```sql\nSELECT COUNT(*)​ FROM sales\n```"
+    assert extract_sql(text) == "SELECT COUNT(*) FROM sales"

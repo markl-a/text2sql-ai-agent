@@ -62,6 +62,17 @@ def extract_json(text: str) -> dict[str, Any]:
     return {}
 
 
+def _sanitize_llm_whitespace(text: str) -> str:
+    """正規化小模型輸出中的異常空白字元。
+
+    gemma3n 等 sentencepiece 系模型偶爾把空白記號 ▁(U+2581) 原樣輸出當縮排,
+    也可能混入 NBSP / 零寬字元;這些會讓 SQLite 解析失敗,且 temperature=0
+    下重試會確定性重複同樣輸出,故在解析層一次淨化。
+    """
+    text = text.replace("▁", " ").replace(" ", " ")
+    return re.sub(r"[​‌‍﻿]", "", text)
+
+
 def extract_sql(text: str) -> str:
     """從 LLM 輸出抽出 SQL 查詢字串。
 
@@ -69,6 +80,7 @@ def extract_sql(text: str) -> str:
     """
     if not text:
         return ""
+    text = _sanitize_llm_whitespace(text)
 
     # 1) ```sql ... ``` 圍欄優先
     fenced = re.search(r"```(?:sql)?\s*(.*?)```", text, re.DOTALL | re.IGNORECASE)
